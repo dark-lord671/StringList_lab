@@ -11,7 +11,6 @@
 
 #include <iostream>
 #include <string.h>
-#include <malloc.h>
 
 
 class String {
@@ -25,36 +24,40 @@ public:
     String(const char* str)
     {
         size = strlen(str);
-        data = (char*)malloc(size + 1);
+        data = new char[size + 1];
         if (!data) {
             throw std::runtime_error("Error : String memory allocation error \n");
         }
     }
 
+    operator char* () { return data; }
+
     String& operator=(const char* str)
     {
         if(data)
-			delete data;
+			delete[] data;
         size = strlen(str);
-        data = (char*)malloc(size + 1);
+        data = new char[size + 1];
+        for (size_t i = 0; i < size + 1; i++)
+            data[i] = str[i];
         return *this;
     }
 
     ~String() {
-        std::cout << "String Destructon \n";
-        free(data);
+        std::cout << "String Destructor \n";
+        delete[] data;
     }
 
     size_t length(void) const {
         return size;
     }
 private:
-    char* data;
-    size_t size;
+    char* data = nullptr;
+    size_t size = 0;
 };
 
 struct ListNode {
-    String data = "";
+    String data;
     ListNode* next = nullptr;
     ListNode* prev = nullptr;
 };
@@ -70,9 +73,25 @@ public:
     // Construct an empry list for ListNode objs.
     StringList(void);
     ~StringList();
+
+    ListNode& operator[](const size_t id) {
+        ListNode* tmp = head;
+        for (size_t i = 0; i < id; i++)
+            tmp = tmp->next;
+        return *tmp;
+    }
+    
     //Head/Tail Access
-    const ListNode* GetHead();//Returns the head element of the list
-    const ListNode* GetTail();//Returns the tail element of the list
+	//Returns the head element of the list
+    const ListNode* GetHead() { return head; }
+    //Returns the tail element of the list
+    const ListNode* GetTail() {
+        ListNode* tmp = head; 
+        while (tmp->next) { 
+            tmp = tmp->next; 
+        } 
+        return tmp; 
+    }
 
     //Operations
     //Adds an element to the head of the list (makes a new head).
@@ -112,10 +131,10 @@ public:
     POSITION GetHeadPosition();
 
     //Gets the element at a given position.
-    const char* GetAt(int)const;
+    const char* GetAt(size_t)const;
 
     //Removes an element from this list as specified by position.
-    void RemoveAt(int);
+    void RemoveAt(size_t);
 
     //Sets the element at a given position.
     void SetAt(char*, int);
@@ -136,10 +155,10 @@ public:
 
     //Status
     //Returns the number of elements in this list.
-    int Getsize()const;
+    size_t Getsize()const { return size; }
 
     //Tests for the empty list condition (no elements).
-    bool IsEmpty()const;
+    bool IsEmpty()const { return size; }
     void Printnode(const ListNode* p);
 
 };

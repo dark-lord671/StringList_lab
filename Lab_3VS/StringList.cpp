@@ -16,8 +16,7 @@ StringList::~StringList() {
 }
 
 //Removes the element from the head of the list.
-void StringList::RemoveHead(void)
-{
+void StringList::RemoveHead(void) {
     if (head)
     {
         ListNode* tmp = head->next;
@@ -25,31 +24,55 @@ void StringList::RemoveHead(void)
         head = tmp;
         size--;
     }
+    throw runtime_error("Error : RemoveHead() head does not exist. \n");
+}
+
+//Gets the element at a given position.
+const char* StringList::GetAt(size_t id)const {
+    if (!IsEmpty()) {
+		ListNode* tmp = head;
+		for (size_t i = 0; i < id; i++) {
+			tmp = tmp->next;
+		}
+		return tmp->data;
+    }
+    throw runtime_error("Error : GetAt() element does not exist. \n");
 }
 
 //Adds an element to the head of the list (makes a new head).
-void StringList::AddHead(const char* str)
-{
+void StringList::AddHead(const char* str) {
     if (!head) {
-        head = (ListNode*) malloc(sizeof(ListNode));
+        head = new ListNode;
         if (!head) {
-            throw runtime_error("Error : Allocanion error AddHead");
+            throw runtime_error("Error : Allocanion error AddHead. \n");
         }
         size++;
         head->data = str;
     }
     else {
-        ListNode* tmp = (ListNode*)malloc(sizeof(ListNode));
+        ListNode* tmp = new ListNode;
         if (!tmp) {
-            throw runtime_error("Error : Allocanion error AddHead");
+            throw runtime_error("Error : Allocanion error AddHead. \n");
         }
         tmp->next = head;
         tmp->next->prev = tmp;
         tmp->data = str;
         head = tmp;
+        size++;
     }
 }
 
+void StringList::AddHead(const StringList* sl) {
+    if (!head) {
+        head = new ListNode;
+        if (!head) {
+            throw runtime_error("Error : Allocanion error AddHead() \n");
+        }
+    }
+	for (size_t i = 0; i < sl->Getsize(); i++) {
+		AddHead(sl->GetAt(sl->Getsize() - 1 - i));
+	}
+}
 
 
 
@@ -60,6 +83,11 @@ int main() {
     try
     {
         StringList lst;
+        StringList lst2;
+        lst2.AddHead("world");
+        lst2.AddHead("hello ");
+        lst.AddHead(&lst2);
+        cout << lst.GetAt(0) << lst.GetAt(1) << endl;
     }
     catch (const std::exception& e)
     {
