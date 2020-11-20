@@ -17,39 +17,40 @@
 class String {
 public:
     String(void)
-        : size(0) {
-        data_ = nullptr;
+    {
+        size = 0;
+        data = nullptr;
     }
 
     String(const char* str)
-        : size(strlen(str))
     {
-        data_ = (char*)malloc(size + 1);
-        if (!data_) {
+        size = strlen(str);
+        data = (char*)malloc(size + 1);
+        if (!data) {
             throw std::runtime_error("Error : String memory allocation error \n");
         }
     }
 
     String& operator=(const char* str)
     {
-        if(!data_)
-			delete data_;
+        if(data)
+			delete data;
         size = strlen(str);
-        data_ = (char*)malloc(size + 1);
+        data = (char*)malloc(size + 1);
         return *this;
     }
 
     ~String() {
         std::cout << "String Destructon \n";
-        free(data_);
+        free(data);
     }
 
-    sizet size(void) const {
-        return this->size;
+    size_t length(void) const {
+        return size;
     }
 private:
-    char* data_;
-    sizet size;
+    char* data;
+    size_t size;
 };
 
 struct ListNode {
@@ -63,7 +64,7 @@ class StringList {
     using POSITION = ListNode*;
 private:
     //put your own data members here
-    sizet size;
+    size_t size;
     ListNode* head;
 public:
     // Construct an empry list for ListNode objs.

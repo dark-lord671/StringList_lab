@@ -40,7 +40,7 @@ void StringList::AddHead(const char* str)
     }
     else {
         ListNode* tmp = (ListNode*)malloc(sizeof(ListNode));
-        if (!head) {
+        if (!tmp) {
             throw runtime_error("Error : Allocanion error AddHead");
         }
         tmp->next = head;
