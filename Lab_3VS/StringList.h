@@ -32,6 +32,11 @@ public:
 
     operator char* () { return data; }
 
+	friend std::ostream& operator<<(std::ostream& os, const String& str)
+	{
+        return os << str.data;
+	}
+
     String& operator=(const char* str)
     {
         if(data)
@@ -56,6 +61,8 @@ private:
     size_t size = 0;
 };
 
+    
+
 struct ListNode {
     String data;
     ListNode* next = nullptr;
@@ -63,24 +70,19 @@ struct ListNode {
 };
 
 class StringList {
-    // typedef const ListNode* POSITION;
-    using POSITION = ListNode*;
 private:
     //put your own data members here
-    size_t size;
-    ListNode* head;
+    size_t size = 0;
+    ListNode* head = nullptr;
+    //const ListNode* current_element = nullptr;
 public:
+    // typedef const ListNode* POSITION;
+    using POSITION = const ListNode*;
+
     // Construct an empry list for ListNode objs.
     StringList(void);
     ~StringList();
 
-    ListNode& operator[](const size_t id) {
-        ListNode* tmp = head;
-        for (size_t i = 0; i < id; i++)
-            tmp = tmp->next;
-        return *tmp;
-    }
-    
     //Head/Tail Access
 	//Returns the head element of the list
     const ListNode* GetHead() { return head; }
@@ -107,7 +109,10 @@ public:
     void AddTail(const StringList*);
 
     //Removes all the elements from this list.
-    void RemoveAll();
+    void RemoveAll() {
+        while (size)
+            RemoveHead();
+    }
 
     //Removes the element from the head of the list.
     void RemoveHead();
@@ -122,13 +127,20 @@ public:
 
     //Iteration
     //Gets the next element for iterating.
-    POSITION GetNext();
+    /*
+    POSITION GetNext() {
+        current_element ? current_element = current_element->next : current_element = head;
+        return current_element;
+    }
 
     //Gets the previous element for iterating.
-    POSITION GetPrev();
-
+    POSITION GetPrev() {
+        current_element ? current_element = current_element->prev : current_element = GetTail();
+        return current_element;
+    }
+	*/
     //Retrieval/Modification
-    POSITION GetHeadPosition();
+    POSITION GetHeadPosition() { return head; }
 
     //Gets the element at a given position.
     const char* GetAt(size_t)const;
@@ -159,7 +171,7 @@ public:
 
     //Tests for the empty list condition (no elements).
     bool IsEmpty()const { return !size; }
-    void Printnode(const ListNode* p);
+    void PrintNode(const ListNode*);
 
 };
 

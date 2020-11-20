@@ -55,6 +55,7 @@ void StringList::AddHead(const char* str) {
         head = new ListNode;
         if (!head) {
             throw runtime_error("Error : Allocanion error AddHead. \n");
+            return;
         }
         size++;
         head->data = str;
@@ -63,6 +64,7 @@ void StringList::AddHead(const char* str) {
         ListNode* tmp = new ListNode;
         if (!tmp) {
             throw runtime_error("Error : Allocanion error AddHead. \n");
+            return;
         }
         tmp->next = head;
         tmp->next->prev = tmp;
@@ -73,13 +75,23 @@ void StringList::AddHead(const char* str) {
 }
 
 void StringList::AddHead(const StringList* sl) {
-    if (sl->IsEmpty())
+    if (sl->IsEmpty()) {
         throw runtime_error("Error : AddHead() adding empty list. \n");
-	for (size_t i = 0; i < sl->Getsize(); i++) {
+        return;
+    }
+	for (size_t i = 0; i < sl->Getsize(); i++)
 		AddHead(sl->GetAt(sl->Getsize() - 1 - i));
-	}
 }
 
+void StringList::PrintNode(const ListNode* node)
+{
+    if (!node) {
+        throw runtime_error("Error : PrintNode node does not exist. \n");
+        return;
+    }
+    cout << node->data << endl;
+
+}
 
 
 
@@ -93,7 +105,8 @@ int main() {
         lst2.AddHead("world");
         lst2.AddHead("hello ");
         lst.AddHead(&lst2);
-        cout << lst.GetAt(0) << lst.GetAt(1) << endl;
+        lst.PrintNode(lst.GetHead());
+        //cout << lst.GetAt(0) << lst.GetAt(1) << endl;
     }
     catch (const std::exception& e)
     {
