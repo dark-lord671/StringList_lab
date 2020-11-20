@@ -79,8 +79,8 @@ void StringList::AddHead(const StringList* sl) {
         throw runtime_error("Error : AddHead() adding empty list. \n");
         return;
     }
-	for (size_t i = 0; i < sl->Getsize(); i++)
-		AddHead(sl->GetAt(sl->Getsize() - 1 - i));
+	for (size_t i = 0; i < sl->size; i++)
+		AddHead(sl->GetAt(sl->size - 1 - i));
 }
 
 void StringList::PrintNode(const ListNode* node)
@@ -93,20 +93,55 @@ void StringList::PrintNode(const ListNode* node)
 
 }
 
+//Adds an element to the tail of the list (makes a new tail).
+void StringList::AddTail(const char* str) {
+    if (!IsEmpty())
+    {
+        ListNode* tmp = head;
+        while (tmp->next)
+            tmp = tmp->next;
+        tmp->next = new ListNode(str);
+        tmp->next->prev = tmp;
+        size++;
+    }
+    else
+        AddHead(str);
+}
 
+//Adds all the elements in another list to the tail of the list (makes a new tail).
+void StringList::AddTail(const StringList* sl) {
+    for (size_t i = 0; i < sl->size; i++) {
+        AddTail(sl->GetAt(i));
+    }
+}
 
-
+//Gets the position of an element specified by a zero-based index.
+size_t StringList::FindIndex(const char* str)const {
+    if (!IsEmpty()) {
+		size_t id = 0;
+		ListNode* tmp = head;
+		while (tmp) {
+			if (!strcmp(tmp->data, str))
+				return id;
+			tmp = tmp->next;
+			id++;
+		}
+    }
+    throw runtime_error("Error : FindIndex() element not found");
+}
 
 int main() {
     try
     {
-        StringList lst;
         StringList lst2;
-        lst2.AddHead("world");
-        lst2.AddHead("hello ");
-        lst.AddHead(&lst2);
-        lst.PrintNode(lst.GetHead());
-        //cout << lst.GetAt(0) << lst.GetAt(1) << endl;
+        lst2.AddHead("world. ");
+        lst2.AddTail("I'm your father");
+        
+        for (ListNode* p = lst2.GetHead(); p != nullptr; p = p->next)
+        {
+            lst2.PrintNode(p);
+        }
+        
     }
     catch (const std::exception& e)
     {

@@ -28,6 +28,8 @@ public:
         if (!data) {
             throw std::runtime_error("Error : String memory allocation error \n");
         }
+        for (size_t i = 0; i < strlen(str) + 1; i++)
+            data[i] = str[i];
     }
 
     operator char* () { return data; }
@@ -61,9 +63,13 @@ private:
     size_t size = 0;
 };
 
-    
-
 struct ListNode {
+    ListNode() {}
+    ListNode(const char* str)
+    {
+        data = str;
+    }
+
     String data;
     ListNode* next = nullptr;
     ListNode* prev = nullptr;
@@ -77,7 +83,7 @@ private:
     //const ListNode* current_element = nullptr;
 public:
     // typedef const ListNode* POSITION;
-    using POSITION = const ListNode*;
+    using POSITION = ListNode *const;
 
     // Construct an empry list for ListNode objs.
     StringList(void);
@@ -85,14 +91,17 @@ public:
 
     //Head/Tail Access
 	//Returns the head element of the list
-    const ListNode* GetHead() { return head; }
+    POSITION GetHead() { return head; }
     //Returns the tail element of the list
-    const ListNode* GetTail() {
-        ListNode* tmp = head; 
-        while (tmp->next) { 
-            tmp = tmp->next; 
-        } 
-        return tmp; 
+    POSITION GetTail() {
+        if (!IsEmpty()) {
+			ListNode* tmp = head; 
+			while (tmp->next) { 
+				tmp = tmp->next; 
+			} 
+			return tmp; 
+        }
+            throw std::runtime_error("Error : GetTail() List is empty");
     }
 
     //Operations
@@ -163,11 +172,11 @@ public:
     const ListNode* Find(char*);
 
     //Gets the position of an element specified by a zero-based index.
-    int FindIndex(char*)const;
+    size_t FindIndex(const char*)const;
 
     //Status
     //Returns the number of elements in this list.
-    size_t Getsize()const { return size; }
+    size_t GetSize()const { return size; }
 
     //Tests for the empty list condition (no elements).
     bool IsEmpty()const { return !size; }
