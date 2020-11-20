@@ -158,7 +158,7 @@ public:
     size_t Getsize()const { return size; }
 
     //Tests for the empty list condition (no elements).
-    bool IsEmpty()const { return size; }
+    bool IsEmpty()const { return !size; }
     void Printnode(const ListNode* p);
 
 };
