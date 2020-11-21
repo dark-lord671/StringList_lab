@@ -196,8 +196,37 @@ StringList::POSITION StringList::Find(const char* str) {
 	return nullptr;
 }
 
-//Sets the element at a given position.
+//Sets the element data to str at a given position.
 void StringList::SetAt(const char* str, const size_t id) {
+    if (id < size && id >= 0) {
+        ListNode* tmp = head;
+        for (size_t i = 0; i < id; i++) {
+            tmp = tmp->next;
+        }
+        tmp->data = str;
+    }
+    else
+        throw runtime_error("Error : SetAt() element on id does not exist. \n");
+}
+
+//Inserts a new element after a given position.
+void StringList::InsertAfter(const char* str, const size_t id) {
+    if (id < size && id >= 0) {
+        ListNode* tmp = head;
+        for (size_t i = 0; i < id; i++) {
+            tmp = tmp->next;
+        }
+        if (tmp->next)
+            InsertBefore(str, id + 1);
+        else
+            AddTail(str);
+    }
+    else
+        throw runtime_error("Error : InserAfter() element on id does not exist. \n");
+}
+
+// Inserts a new element before a given position.
+void StringList::InsertBefore(const char* str, const size_t id) {
     if (id < size && id >= 0) {
         ListNode* tmp = head;
         for (size_t i = 0; i < id; i++) {
@@ -209,7 +238,7 @@ void StringList::SetAt(const char* str, const size_t id) {
                 // If the next element and the previous element exists
                 ListNode* NewNode = new ListNode(str);
                 if (!NewNode) {
-					throw runtime_error("Error : Allocanion error AddHead. \n");
+					throw runtime_error("Error : InseerBefore() Allocanion error. \n");
 					return;
                 }
                 tmp->prev->next = NewNode;
@@ -230,23 +259,7 @@ void StringList::SetAt(const char* str, const size_t id) {
         }
     }
     else
-        throw runtime_error("Error : SetAt() out of StringList range. \n");
-}
-
-//Inserts a new element after a given position.
-void StringList::InsertAfter(const char* str, const size_t id) {
-    if (id < size && id >= 0) {
-        ListNode* tmp = head;
-        for (size_t i = 0; i < id; i++) {
-            tmp = tmp->next;
-        }
-        if (tmp->next)
-            SetAt(str, id + 1);
-        else
-            AddTail(str);
-    }
-    else
-        throw runtime_error("Error : InserAfter() element on id does not exist. \n");
+        throw runtime_error("Error : InsertBefore() out of StringList range. \n");
 }
 
 void StringList::AppendExclusively(const StringList& sl) {
@@ -269,17 +282,19 @@ int main() {
         lst2.AddHead("world. ");
         lst2.AddHead("hello ");
         lst2.AddTail("I'm your father. ");
-        lst2.SetAt("Now u're gonna die! ", 1);
+        lst2.SetAt("Linus Torvalds made a new commit!!! ", 1);
+        lst2.InsertBefore("Now u're gonna die! ", 0);
         StringList lst;
         lst2.AppendExclusively(lst);
         lst2.InsertAfter("Insert after test. ", lst2.GetSize() - 1);
+        cout << endl << endl;
         for (ListNode* p = lst2.GetHead(); p != nullptr; p = p->next) {
             p->PrintNode();
         }
         cout << endl << endl;
         lst2.RemoveTail();
         cout << endl;
-        lst2.Find("world ")->PrintNode();
+        lst2.Find("world. ")->PrintNode();
         cout << endl;
         for (ListNode* p = lst2.GetHead(); p != nullptr; p = p->next) {
             p->PrintNode();

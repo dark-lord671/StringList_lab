@@ -45,8 +45,10 @@ public:
 
     String& operator=(const char* str)
     {
-        if(data)
+        if (data) {
+			std::cout << "\nString Destructor";
 			delete[] data;
+        }
         size = strlen(str);
         data = new char[size + 1];
         for (size_t i = 0; i < size + 1; i++)
@@ -172,7 +174,7 @@ public:
     void InsertAfter(const char*, const size_t);
 
     //Inserts a new element before a given position.
-    void InsertBefore(char*, int);
+    void InsertBefore(const char*, const size_t);
 
     //Searching
     //Gets the position of an element specified by string value.
