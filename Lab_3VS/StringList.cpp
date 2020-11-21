@@ -89,8 +89,7 @@ void StringList::PrintNode(const ListNode* node)
         throw runtime_error("Error : PrintNode node does not exist. \n");
         return;
     }
-    cout << node->data << endl;
-
+    cout << node->data;
 }
 
 //Adds an element to the tail of the list (makes a new tail).
@@ -194,14 +193,50 @@ StringList::POSITION StringList::Find(const char* str) {
     throw runtime_error("Error : Find() StringList is empty \n");
 }
 
+//Sets the element at a given position.
+void StringList::SetAt(const char* str, const size_t id) {
+    if (id < size && id >= 0) {
+        ListNode* tmp = head;
+        for (size_t i = 0; i < id; i++) {
+            tmp = tmp->next;
+        }
+        if (tmp->next) {
+			// If the next element exists
+            if (tmp->prev) {
+                // If the next element and the previous element exists
+                ListNode* NewNode = new ListNode(str);
+                tmp->prev->next = NewNode;
+                NewNode->next = tmp;
+                NewNode->prev = tmp->prev;
+                tmp->prev = NewNode;
+                size++;
+            }
+            else {
+                // If the next element exists but the previous does not exist
+                AddHead(str);
+            }
+
+        }
+        else {
+			// If the next element does not exist
+            AddTail(str);
+        }
+    }
+    else
+        throw runtime_error("Error : SetAt() out of StringList range. \n");
+}
+
+
+
+
 int main() {
     try
     {
         StringList lst2;
         lst2.AddHead("world. ");
         lst2.AddHead("hello ");
-        lst2.AddTail("I'm your father");
-        lst2.RemoveAt(0);
+        lst2.AddTail("I'm your father. ");
+        lst2.SetAt("Now u're gonna die! ", 1);
         for (ListNode* p = lst2.GetHead(); p != nullptr; p = p->next)
         {
             lst2.PrintNode(p);

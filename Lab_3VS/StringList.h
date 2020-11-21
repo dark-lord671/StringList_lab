@@ -51,7 +51,7 @@ public:
     }
 
     ~String() {
-        std::cout << "String Destructor \n";
+        std::cout << "\nString Destructor";
         delete[] data;
     }
 
@@ -157,7 +157,7 @@ public:
     void RemoveAt(size_t);
 
     //Sets the element at a given position.
-    void SetAt(char*, size_t);
+    void SetAt(const char*, const size_t);
 
     //Insertion
     //Inserts a new element after a given position.
