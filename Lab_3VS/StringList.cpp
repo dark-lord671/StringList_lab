@@ -227,6 +227,21 @@ void StringList::SetAt(const char* str, const size_t id) {
 }
 
 
+//Inserts a new element after a given position.
+void StringList::InsertAfter(const char* str, const size_t id) {
+    if (id < size && id >= 0) {
+        ListNode* tmp = head;
+        for (size_t i = 0; i < id; i++) {
+            tmp = tmp->next;
+        }
+        if (tmp->next)
+            SetAt(str, id + 1);
+        else
+            AddTail(str);
+    }
+    else
+        throw runtime_error("Error : InserAfter() element on id does not exist. \n");
+}
 
 
 int main() {
@@ -237,15 +252,16 @@ int main() {
         lst2.AddHead("hello ");
         lst2.AddTail("I'm your father. ");
         lst2.SetAt("Now u're gonna die! ", 1);
-        for (ListNode* p = lst2.GetHead(); p != nullptr; p = p->next)
-        {
+        lst2.InsertAfter("Insert after test. ", lst2.GetSize() - 1);
+        for (ListNode* p = lst2.GetHead(); p != nullptr; p = p->next) {
             lst2.PrintNode(p);
         }
         cout << endl << endl;
         lst2.RemoveTail();
+        cout << endl;
         lst2.PrintNode(lst2.Find("world. "));
-        for (ListNode* p = lst2.GetHead(); p != nullptr; p = p->next)
-        {
+        cout << endl;
+        for (ListNode* p = lst2.GetHead(); p != nullptr; p = p->next) {
             lst2.PrintNode(p);
         }
         

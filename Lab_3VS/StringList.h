@@ -161,7 +161,7 @@ public:
 
     //Insertion
     //Inserts a new element after a given position.
-    void InsertAfter(char*, size_t);
+    void InsertAfter(const char*, const size_t);
 
     //Inserts a new element before a given position.
     void InsertBefore(char*, int);
