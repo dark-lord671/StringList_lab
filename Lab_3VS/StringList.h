@@ -135,9 +135,12 @@ public:
     //Removes the element from the tail of the list.
     void RemoveTail();
 
-    // Adds StringList* items to the tail of the list in addition to the existing ones
+    // Adds StringList items to the tail of the list in addition to the existing ones
     void AppendExclusively(const StringList&);
-    void Splice(POSITION where, StringList* sl, POSITION first, POSITION last);
+
+    // Removes elements from the StringList from first to last
+    //      and inserts them into the current list, starting from the position where.
+    void Splice(POSITION where, StringList& sl, POSITION first, POSITION last);
 
     //removes all duplicate elements
     void Unique();

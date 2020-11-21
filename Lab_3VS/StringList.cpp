@@ -24,13 +24,12 @@ void StringList::RemoveHead(void) {
 			delete head;
 			head = tmp;
 			head->prev = nullptr;
-			size--;
 		}
         else {
             delete head;
             head = nullptr;
-            size--;
         }
+		size--;
     }
     else
 		throw runtime_error("Error : RemoveHead() head does not exist. \n");
@@ -87,7 +86,8 @@ void ListNode::PrintNode() const
 {
     if (!data)
         throw runtime_error("Error : PrintNode() node is empty. \n");
-    cout << data;
+    else
+		cout << data;
 }
 
 //Adds an element to the tail of the list (makes a new tail).
@@ -126,6 +126,7 @@ void StringList::RemoveTail() {
         }
         else {
             delete head;
+            head = nullptr;
         }
 			size--;
     }
@@ -262,6 +263,7 @@ void StringList::InsertBefore(const char* str, const size_t id) {
         throw runtime_error("Error : InsertBefore() out of StringList range. \n");
 }
 
+// Adds StringList items to the tail of the list in addition to the existing ones
 void StringList::AppendExclusively(const StringList& sl) {
     if (!IsEmpty())
     {
@@ -275,9 +277,69 @@ void StringList::AppendExclusively(const StringList& sl) {
         AddTail(sl);
 }
 
+// Removes elements from the StringList from first to last
+//      and inserts them into the current list, starting from the position where.
+void StringList::Splice(POSITION where, StringList& sl, POSITION first, POSITION last) {
+    // Проиттерироваться от first до last, проверяя указатели на nullptr
+    // Если из frist можно доьраться до last, удаляем и переносим в where
+    if (!where)
+        throw runtime_error("Error : Splice() where is nullptr. \n");
+    if (!first)
+        throw runtime_error("Error : Splice() first is nullptr. \n");
+    if (!last)
+        throw runtime_error("Error : Splice() last is nullptr. \n");
+    bool flag = false;
+    ListNode* tmp = first;
+    while (tmp) {
+        if (tmp == last) {
+            flag = true;
+            break;
+        }
+        tmp = tmp->next;
+    }
+    if (flag) {
+        ListNode* pastepos = where;
+        tmp = first;
+        while (tmp) {
+            // Скопировать, удалить перепестить указатель
+            InsertAfter(tmp->data, FindIndex(pastepos->data));
+            pastepos = pastepos->next;
+            tmp = tmp->next;
+            sl.RemoveAt(sl.FindIndex(pastepos->data));
+        }
+    }
+    else {
+        throw runtime_error("Error : Splice() can't get from first to last. \n");
+    }
+}
+
+void checkSplice(void) {
+    StringList lst;
+    lst.AddHead("one");
+    lst.AddTail("two");
+    lst.AddTail("three");
+    lst.AddTail("four");
+    lst.AddTail("five");
+    StringList lst2;
+    lst2.AddTail("check this out");
+    lst2.Splice(lst2.GetHead(), lst, lst.GetHead(), lst.GetTail());
+    cout << "lst: \n";
+    for (ListNode* p = lst.GetHead(); p != nullptr; p = p->GetNext()) {
+        p->PrintNode();
+        cout << " "; 
+    }
+	cout << endl << endl; 
+    cout << "lst2: \n";
+    for (ListNode* p = lst2.GetHead(); p != nullptr; p = p->GetNext()) {
+        p->PrintNode();
+        cout << " "; 
+    }
+}
+
 int main() {
     try
     {
+        checkSplice();
         StringList lst2;
         lst2.AddHead("world. ");
         lst2.AddHead("hello ");
