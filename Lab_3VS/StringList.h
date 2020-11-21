@@ -32,13 +32,11 @@ public:
             data[i] = str[i];
     }
 
-    operator char* () {
+    operator char* () const {
         return !this ? nullptr : data;
     }
 
-    //{ if(!this) return data; }
-
-	friend std::ostream& operator<<(std::ostream& os, const String& str)
+	friend std::ostream& operator<<(std::ostream& os, const String& str) 
 	{
         return os << str.data;
 	}
@@ -80,7 +78,11 @@ struct ListNode {
     ListNode* next = nullptr;
     ListNode* prev = nullptr;
 
-    void PrintNode();
+    void PrintNode() const;
+
+    //Gets the next element for iterating.
+    ListNode* const GetNext() const { return next; }
+    ListNode* const GetPrev() const { return prev; }
 };
 
 class StringList {
@@ -98,17 +100,14 @@ public:
 
     //Head/Tail Access
 	//Returns the head element of the list
-    POSITION GetHead() { return head; }
+    POSITION GetHead() const { return head; }
     //Returns the tail element of the list
-    POSITION GetTail() {
-        if (!IsEmpty()) {
-			ListNode* tmp = head; 
-			while (tmp->next) { 
-				tmp = tmp->next; 
-			} 
-			return tmp; 
-        }
-            throw std::runtime_error("Error : GetTail() List is empty");
+    POSITION GetTail() const{
+		ListNode* tmp = head; 
+		while (tmp->next) { 
+			tmp = tmp->next; 
+		} 
+		return tmp; 
     }
 
     //Operations
@@ -143,23 +142,6 @@ public:
     //removes all duplicate elements
     void Unique();
 
-    //Iteration
-    //Gets the next element for iterating.
-    /*
-    POSITION GetNext() {
-        current_element ? current_element = current_element->next : current_element = head;
-        return current_element;
-    }
-
-    //Gets the previous element for iterating.
-    POSITION GetPrev() {
-        current_element ? current_element = current_element->prev : current_element = GetTail();
-        return current_element;
-    }
-	*/
-    //Retrieval/Modification
-    POSITION GetHeadPosition() { return head; }
-
     //Gets the element at a given position.
     const char* GetAt(size_t)const;
 
@@ -178,7 +160,7 @@ public:
 
     //Searching
     //Gets the position of an element specified by string value.
-    POSITION Find(const char*);
+    POSITION Find(const char*) const;
 
     //Gets the position of an element specified by a zero-based index.
     size_t FindIndex(const char*)const;

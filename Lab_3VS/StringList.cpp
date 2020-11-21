@@ -37,7 +37,7 @@ void StringList::RemoveHead(void) {
 }
 
 //Gets the element at a given position.
-const char* StringList::GetAt(size_t id)const {
+const char* StringList::GetAt(size_t id) const {
     if (id < size && id >= 0) {
 		ListNode* tmp = head;
 		for (size_t i = 0; i < id; i++) {
@@ -83,7 +83,7 @@ void StringList::AddHead(const StringList& sl) {
 		AddHead(sl.GetAt(sl.size - 1 - i));
 }
 
-void ListNode::PrintNode()
+void ListNode::PrintNode() const
 {
     if (!data)
         throw runtime_error("Error : PrintNode() node is empty. \n");
@@ -165,7 +165,7 @@ void StringList::RemoveAt(const size_t id) {
 }
 
 //Gets the position of an element specified by a zero-based index.
-size_t StringList::FindIndex(const char* str)const {
+size_t StringList::FindIndex(const char* str) const {
     if (!IsEmpty()) {
 		size_t id = 0;
 		ListNode* tmp = head;
@@ -180,7 +180,7 @@ size_t StringList::FindIndex(const char* str)const {
 }
 
 //Gets the position of an element specified by string value.
-StringList::POSITION StringList::Find(const char* str) {
+StringList::POSITION StringList::Find(const char* str) const {
     if (!IsEmpty())
     {
         ListNode *tmp = head;
@@ -288,7 +288,7 @@ int main() {
         lst2.AppendExclusively(lst);
         lst2.InsertAfter("Insert after test. ", lst2.GetSize() - 1);
         cout << endl << endl;
-        for (ListNode* p = lst2.GetHead(); p != nullptr; p = p->next) {
+        for (const ListNode* p = lst2.GetHead(); p != nullptr; p = p->GetNext()) {
             p->PrintNode();
         }
         cout << endl << endl;
