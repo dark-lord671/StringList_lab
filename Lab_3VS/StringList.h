@@ -32,7 +32,11 @@ public:
             data[i] = str[i];
     }
 
-    operator char* () { return data; }
+    operator char* () {
+        return !this ? nullptr : data;
+    }
+
+    //{ if(!this) return data; }
 
 	friend std::ostream& operator<<(std::ostream& os, const String& str)
 	{
@@ -73,6 +77,8 @@ struct ListNode {
     String data;
     ListNode* next = nullptr;
     ListNode* prev = nullptr;
+
+    void PrintNode();
 };
 
 class StringList {
@@ -108,13 +114,13 @@ public:
     void AddHead(const char*);
 
     //Adds all the elements in another list to the head of the list (makes a new head).
-    void AddHead(const StringList*);
+    void AddHead(const StringList&);
 
     //Adds an element to the tail of the list (makes a new tail).
     void AddTail(const char*);
 
     //Adds all the elements in another list to the tail of the list (makes a new tail).
-    void AddTail(const StringList*);
+    void AddTail(const StringList&);
 
     //Removes all the elements from this list.
     void RemoveAll() {
@@ -127,7 +133,9 @@ public:
 
     //Removes the element from the tail of the list.
     void RemoveTail();
-    void AppendExclusively(const StringList*);
+
+    // Adds StringList* items to the tail of the list in addition to the existing ones
+    void AppendExclusively(const StringList&);
     void Splice(POSITION where, StringList* sl, POSITION first, POSITION last);
 
     //removes all duplicate elements
@@ -179,7 +187,6 @@ public:
 
     //Tests for the empty list condition (no elements).
     bool IsEmpty()const { return !size; }
-    void PrintNode(const ListNode*);
 
 };
 

@@ -74,22 +74,20 @@ void StringList::AddHead(const char* str) {
     }
 }
 
-void StringList::AddHead(const StringList* sl) {
-    if (sl->IsEmpty()) {
+void StringList::AddHead(const StringList& sl) {
+    if (sl.IsEmpty()) {
         throw runtime_error("Error : AddHead() adding empty list. \n");
         return;
     }
-	for (size_t i = 0; i < sl->size; i++)
-		AddHead(sl->GetAt(sl->size - 1 - i));
+	for (size_t i = 0; i < sl.size; i++)
+		AddHead(sl.GetAt(sl.size - 1 - i));
 }
 
-void StringList::PrintNode(const ListNode* node)
+void ListNode::PrintNode()
 {
-    if (!node) {
-        throw runtime_error("Error : PrintNode node does not exist. \n");
-        return;
-    }
-    cout << node->data;
+    if (!data)
+        throw runtime_error("Error : PrintNode() node is empty. \n");
+    cout << data;
 }
 
 //Adds an element to the tail of the list (makes a new tail).
@@ -100,6 +98,10 @@ void StringList::AddTail(const char* str) {
         while (tmp->next)
             tmp = tmp->next;
         tmp->next = new ListNode(str);
+        if (!tmp->next) {
+            throw runtime_error("Error : Allocanion error AddHead. \n");
+            return;
+        }
         tmp->next->prev = tmp;
         size++;
     }
@@ -108,10 +110,10 @@ void StringList::AddTail(const char* str) {
 }
 
 //Adds all the elements in another list to the tail of the list (makes a new tail).
-void StringList::AddTail(const StringList* sl) {
-    for (size_t i = 0; i < sl->size; i++) {
-        AddTail(sl->GetAt(i));
-    }
+void StringList::AddTail(const StringList& sl) {
+		for (size_t i = 0; i < sl.size; i++) {
+			AddTail(sl.GetAt(i));
+		}
 }
 
 //Removes the element from the tail of the list.
@@ -188,9 +190,10 @@ StringList::POSITION StringList::Find(const char* str) {
                 return tmp;
 			tmp = tmp->next;
         }
-		throw runtime_error("Error : Find() element does not exist. \n");
+		//throw runtime_error("Error : Find() element does not exist. \n");
     }
-    throw runtime_error("Error : Find() StringList is empty \n");
+    //throw runtime_error("Error : Find() StringList is empty \n");
+	return nullptr;
 }
 
 //Sets the element at a given position.
@@ -205,6 +208,10 @@ void StringList::SetAt(const char* str, const size_t id) {
             if (tmp->prev) {
                 // If the next element and the previous element exists
                 ListNode* NewNode = new ListNode(str);
+                if (!NewNode) {
+					throw runtime_error("Error : Allocanion error AddHead. \n");
+					return;
+                }
                 tmp->prev->next = NewNode;
                 NewNode->next = tmp;
                 NewNode->prev = tmp->prev;
@@ -226,7 +233,6 @@ void StringList::SetAt(const char* str, const size_t id) {
         throw runtime_error("Error : SetAt() out of StringList range. \n");
 }
 
-
 //Inserts a new element after a given position.
 void StringList::InsertAfter(const char* str, const size_t id) {
     if (id < size && id >= 0) {
@@ -243,6 +249,18 @@ void StringList::InsertAfter(const char* str, const size_t id) {
         throw runtime_error("Error : InserAfter() element on id does not exist. \n");
 }
 
+void StringList::AppendExclusively(const StringList& sl) {
+    if (!IsEmpty())
+    {
+        for (size_t i = 0; i < sl.size; i++)
+        {
+			if (!Find(sl.GetAt(sl.size - 1 - i)))
+                AddTail(sl.GetAt(sl.size - 1 - i));
+        }
+    }
+    else
+        AddTail(sl);
+}
 
 int main() {
     try
@@ -252,17 +270,19 @@ int main() {
         lst2.AddHead("hello ");
         lst2.AddTail("I'm your father. ");
         lst2.SetAt("Now u're gonna die! ", 1);
+        StringList lst;
+        lst2.AppendExclusively(lst);
         lst2.InsertAfter("Insert after test. ", lst2.GetSize() - 1);
         for (ListNode* p = lst2.GetHead(); p != nullptr; p = p->next) {
-            lst2.PrintNode(p);
+            p->PrintNode();
         }
         cout << endl << endl;
         lst2.RemoveTail();
         cout << endl;
-        lst2.PrintNode(lst2.Find("world. "));
+        lst2.Find("world ")->PrintNode();
         cout << endl;
         for (ListNode* p = lst2.GetHead(); p != nullptr; p = p->next) {
-            lst2.PrintNode(p);
+            p->PrintNode();
         }
         
     }
