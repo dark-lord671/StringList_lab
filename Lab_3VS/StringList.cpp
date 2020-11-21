@@ -130,13 +130,30 @@ size_t StringList::FindIndex(const char* str)const {
     throw runtime_error("Error : FindIndex() element not found");
 }
 
+//Gets the position of an element specified by string value.
+StringList::POSITION StringList::Find(const char* str)
+{
+    if (!IsEmpty())
+    {
+        ListNode *tmp = head;
+        for (size_t i = 0; i < size; i++)
+        {
+            if (!strcmp(GetAt(i), str))
+                return tmp;
+			tmp = tmp->next;
+        }
+		throw runtime_error("Error : Find() element does not exist. \n");
+    }
+    throw runtime_error("Error : Find() StringList is empty \n");
+}
+
 int main() {
     try
     {
         StringList lst2;
         lst2.AddHead("world. ");
         lst2.AddTail("I'm your father");
-        
+        lst2.PrintNode(lst2.Find("world. "));
         for (ListNode* p = lst2.GetHead(); p != nullptr; p = p->next)
         {
             lst2.PrintNode(p);

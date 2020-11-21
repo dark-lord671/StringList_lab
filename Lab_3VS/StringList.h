@@ -82,7 +82,6 @@ private:
     ListNode* head = nullptr;
     //const ListNode* current_element = nullptr;
 public:
-    // typedef const ListNode* POSITION;
     using POSITION = ListNode *const;
 
     // Construct an empry list for ListNode objs.
@@ -158,18 +157,18 @@ public:
     void RemoveAt(size_t);
 
     //Sets the element at a given position.
-    void SetAt(char*, int);
+    void SetAt(char*, size_t);
 
     //Insertion
     //Inserts a new element after a given position.
-    void InsertAfter(char*, int);
+    void InsertAfter(char*, size_t);
 
     //Inserts a new element before a given position.
     void InsertBefore(char*, int);
 
     //Searching
     //Gets the position of an element specified by string value.
-    const ListNode* Find(char*);
+    POSITION Find(const char*);
 
     //Gets the position of an element specified by a zero-based index.
     size_t FindIndex(const char*)const;
