@@ -115,6 +115,23 @@ void StringList::AddTail(const StringList* sl) {
     }
 }
 
+//Removes the element from the tail of the list.
+void StringList::RemoveTail() {
+    if (!IsEmpty()) {
+        if (GetTail()->prev) {
+			POSITION tmp = GetTail();
+			tmp->prev->next = nullptr;
+			delete tmp;
+        }
+        else {
+            delete head;
+        }
+			size--;
+    }
+    else
+		throw runtime_error("Error : RemoveTail() StingList is empty. \n");
+}
+
 //Gets the position of an element specified by a zero-based index.
 size_t StringList::FindIndex(const char* str)const {
     if (!IsEmpty()) {
@@ -131,8 +148,7 @@ size_t StringList::FindIndex(const char* str)const {
 }
 
 //Gets the position of an element specified by string value.
-StringList::POSITION StringList::Find(const char* str)
-{
+StringList::POSITION StringList::Find(const char* str) {
     if (!IsEmpty())
     {
         ListNode *tmp = head;
@@ -153,6 +169,7 @@ int main() {
         StringList lst2;
         lst2.AddHead("world. ");
         lst2.AddTail("I'm your father");
+        lst2.RemoveTail();
         lst2.PrintNode(lst2.Find("world. "));
         for (ListNode* p = lst2.GetHead(); p != nullptr; p = p->next)
         {
