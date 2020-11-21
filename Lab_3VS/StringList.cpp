@@ -132,6 +132,37 @@ void StringList::RemoveTail() {
 		throw runtime_error("Error : RemoveTail() StingList is empty. \n");
 }
 
+//Removes an element from this list as specified by position.
+void StringList::RemoveAt(const size_t id) {
+    if (id < size && id >= 0) {
+		ListNode* tmp = head;
+		for (size_t i = 0; i < id; i++) {
+			tmp = tmp->next;
+		}
+        if (tmp->next) {
+			// If the next element exists
+            if (tmp->prev) {
+                // If the next element and the previous element exists
+                tmp->next->prev = tmp->prev;
+                tmp->prev->next = tmp->next;
+                delete tmp;
+                size--;
+            }
+            else {
+                // If the next element exists but the previous does not exist
+                RemoveHead();
+            }
+
+        }
+        else {
+			// If the next element does not exist
+            RemoveTail();
+        }
+    }
+    else
+		throw runtime_error("Error : RemoveAt() element does not exist. \n");
+}
+
 //Gets the position of an element specified by a zero-based index.
 size_t StringList::FindIndex(const char* str)const {
     if (!IsEmpty()) {
@@ -168,7 +199,14 @@ int main() {
     {
         StringList lst2;
         lst2.AddHead("world. ");
+        lst2.AddHead("hello ");
         lst2.AddTail("I'm your father");
+        lst2.RemoveAt(0);
+        for (ListNode* p = lst2.GetHead(); p != nullptr; p = p->next)
+        {
+            lst2.PrintNode(p);
+        }
+        cout << endl << endl;
         lst2.RemoveTail();
         lst2.PrintNode(lst2.Find("world. "));
         for (ListNode* p = lst2.GetHead(); p != nullptr; p = p->next)
