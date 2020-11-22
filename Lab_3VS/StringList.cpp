@@ -280,8 +280,6 @@ void StringList::AppendExclusively(const StringList& sl) {
 // Removes elements from the StringList from first to last
 //      and inserts them into the current list, starting from the position where.
 void StringList::Splice(POSITION where, StringList& sl, POSITION first, POSITION last) {
-    // Проиттерироваться от first до last, проверяя указатели на nullptr
-    // Если из frist можно доьраться до last, удаляем и переносим в where
     if (!where)
         throw runtime_error("Error : Splice() where is nullptr. \n");
     if (!first)
@@ -301,7 +299,6 @@ void StringList::Splice(POSITION where, StringList& sl, POSITION first, POSITION
         ListNode* pastepos = where;
         tmp = first;
         while (tmp) {
-            // Скопировать, удалить перепестить указатель
             InsertAfter(tmp->data, FindIndex(pastepos->data));
             pastepos = pastepos->next;
             tmp = tmp->next;
@@ -310,6 +307,18 @@ void StringList::Splice(POSITION where, StringList& sl, POSITION first, POSITION
     }
     else {
         throw runtime_error("Error : Splice() can't get from first to last. \n");
+    }
+}
+
+// Removes all duplicate elements
+void StringList::Unique() {
+    for (size_t i = 0; i < size; i++) {
+        for (size_t j = 0; j < i; j++) {
+            if (!strcmp(GetAt(i), GetAt(j))) {
+                RemoveAt(i--);
+                break;
+            }
+        }
     }
 }
 
@@ -336,9 +345,33 @@ void checkSplice(void) {
     }
 }
 
+void checkUnique(void) {
+    StringList lst;
+    lst.AddTail("one");
+    lst.AddTail("2");
+    lst.AddHead("one");
+    lst.AddTail("one");
+    lst.AddTail("one");
+    lst.AddTail("1");
+    lst.AddHead("2");
+    lst.AddTail("3");
+    lst.AddTail("4");
+    lst.InsertAfter("one", 7);
+    lst.InsertBefore("one", 3);
+    lst.Unique();
+    lst.Unique();
+	cout << endl;
+    for (ListNode* p = lst.GetHead(); p != nullptr; p = p->GetNext())
+    {
+        p->PrintNode();
+        cout << " ";
+    }
+        cout << endl;
+}
 int main() {
     try
     {
+        checkUnique();
         checkSplice();
         StringList lst2;
         lst2.AddHead("world. ");
