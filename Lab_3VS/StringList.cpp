@@ -50,6 +50,8 @@ const char* StringList::GetAt(size_t id) const {
 
 //Adds an element to the head of the list (makes a new head).
 void StringList::AddHead(const char* str) {
+    if(!str)
+		throw invalid_argument("Error : Invalid str argument AddHead. \n");
     if (!head) {
         head = new ListNode;
         if (!head) {
@@ -167,6 +169,8 @@ void StringList::RemoveAt(const size_t id) {
 
 //Gets the position of an element specified by a zero-based index.
 size_t StringList::FindIndex(const char* str) const {
+    if (!str)
+        throw invalid_argument("Error : Invalid str argument FindIndex");
     if (!IsEmpty()) {
 		size_t id = 0;
 		ListNode* tmp = head;
@@ -182,6 +186,8 @@ size_t StringList::FindIndex(const char* str) const {
 
 //Gets the position of an element specified by string value.
 StringList::POSITION StringList::Find(const char* str) const {
+    if(!str)
+        throw invalid_argument("Error : Invalid str argument Find");
     if (!IsEmpty())
     {
         ListNode *tmp = head;
@@ -228,7 +234,7 @@ void StringList::InsertAfter(const char* str, const size_t id) {
 
 // Inserts a new element before a given position.
 void StringList::InsertBefore(const char* str, const size_t id) {
-    if (id < size && id >= 0) {
+    if (id < size) {
         ListNode* tmp = head;
         for (size_t i = 0; i < id; i++) {
             tmp = tmp->next;
@@ -320,87 +326,4 @@ void StringList::Unique() {
             }
         }
     }
-}
-
-void checkSplice(void) {
-    StringList lst;
-    lst.AddHead("one");
-    lst.AddTail("two");
-    lst.AddTail("three");
-    lst.AddTail("four");
-    lst.AddTail("five");
-    StringList lst2;
-    lst2.AddTail("check this out");
-    lst2.Splice(lst2.GetHead(), lst, lst.GetHead(), lst.GetTail());
-    cout << "lst: \n";
-    for (ListNode* p = lst.GetHead(); p != nullptr; p = p->GetNext()) {
-        p->PrintNode();
-        cout << " "; 
-    }
-	cout << endl << endl; 
-    cout << "lst2: \n";
-    for (ListNode* p = lst2.GetHead(); p != nullptr; p = p->GetNext()) {
-        p->PrintNode();
-        cout << " "; 
-    }
-}
-
-void checkUnique(void) {
-    StringList lst;
-    lst.AddTail("one");
-    lst.AddTail("2");
-    lst.AddHead("one");
-    lst.AddTail("one");
-    lst.AddTail("one");
-    lst.AddTail("1");
-    lst.AddHead("2");
-    lst.AddTail("3");
-    lst.AddTail("4");
-    lst.InsertAfter("one", 7);
-    lst.InsertBefore("one", 3);
-    lst.Unique();
-    lst.Unique();
-	cout << endl;
-    for (ListNode* p = lst.GetHead(); p != nullptr; p = p->GetNext())
-    {
-        p->PrintNode();
-        cout << " ";
-    }
-        cout << endl;
-}
-int main() {
-    try
-    {
-        checkUnique();
-        checkSplice();
-        StringList lst2;
-        lst2.AddHead("world. ");
-        lst2.AddHead("hello ");
-        lst2.AddTail("I'm your father. ");
-        lst2.SetAt("Linus Torvalds made a new commit!!! ", 1);
-        lst2.InsertBefore("Now u're gonna die! ", 0);
-        StringList lst;
-        lst2.AppendExclusively(lst);
-        lst2.InsertAfter("Insert after test. ", lst2.GetSize() - 1);
-        cout << endl << endl;
-        for (const ListNode* p = lst2.GetHead(); p != nullptr; p = p->GetNext()) {
-            p->PrintNode();
-        }
-        cout << endl << endl;
-        lst2.RemoveTail();
-        cout << endl;
-        lst2.Find("world. ")->PrintNode();
-        cout << endl;
-        for (ListNode* p = lst2.GetHead(); p != nullptr; p = p->next) {
-            p->PrintNode();
-        }
-        
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
-
-
-    return 0;
 }

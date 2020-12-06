@@ -36,17 +36,20 @@ public:
         return !this ? nullptr : data;
     }
 
-	friend std::ostream& operator<<(std::ostream& os, const String& str) 
-	{
+    friend std::ostream& operator<<(std::ostream& os, const String& str)
+    {
         return os << str.data;
-	}
+    }
+
+    friend bool operator==(const String& lhs, const String& rhs)
+    {
+        return !strcmp(lhs, rhs);
+    }
 
     String& operator=(const char* str)
     {
-        if (data) {
-			std::cout << "\nString Destructor";
-			delete[] data;
-        }
+        if (data)
+            delete[] data;
         size = strlen(str);
         data = new char[size + 1];
         for (size_t i = 0; i < size + 1; i++)
@@ -74,6 +77,11 @@ struct ListNode {
         data = str;
     }
 
+    friend bool operator ==(const ListNode& lhs,
+        const ListNode& rhs) {
+        return lhs.data == rhs.data;
+    }
+
     String data;
     ListNode* next = nullptr;
     ListNode* prev = nullptr;
@@ -92,11 +100,29 @@ private:
     ListNode* head = nullptr;
     //const ListNode* current_element = nullptr;
 public:
-    using POSITION = ListNode *const;
+    using POSITION = ListNode* const;
 
     // Construct an empry list for ListNode objs.
     StringList(void);
     ~StringList();
+
+    friend bool operator ==(const StringList& lhs,
+        const StringList& rhs) {
+        if (lhs.size == rhs.size && !lhs.IsEmpty()) {
+            ListNode* rhs_p = rhs.head;
+            ListNode* lhs_p = lhs.head;
+            while (rhs_p && lhs_p)
+            {
+                if (strcmp(rhs_p->data, lhs_p->data))
+                    return false;
+                rhs_p = rhs_p->next;
+                lhs_p = lhs_p->next;
+            }
+            return true;
+        }
+        else
+            return false;
+    }
 
     //Head/Tail Access
 	//Returns the head element of the list
