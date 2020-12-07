@@ -22,18 +22,6 @@ void checkSplice(void) {
         p->PrintNode();
         cout << " "; 
     }
-    {
-		StringList lst1;
-		StringList control_lst;
-		/**/
-		assert(lst1 == control_lst);
-    }
-    {
-		StringList lst1;
-		StringList control_lst;
-		/**/
-		assert(lst1 == control_lst);
-    }
 }
 
 void checkUnique(void)
@@ -51,7 +39,6 @@ void checkUnique(void)
     lst.InsertAfter("one", 7);
     lst.InsertBefore("one", 3);
     lst.Unique();
-    lst.Unique();
 	cout << endl;
     for (ListNode* p = lst.GetHead(); p != nullptr; p = p->GetNext())
     {
@@ -59,4 +46,46 @@ void checkUnique(void)
         cout << " ";
     }
         cout << endl;
+}
+
+void AllTests(void) {
+    try
+    {
+        StringList lst;
+        lst.AddHead("first. ");
+        lst.AddHead("second ");
+        lst.AddTail("third. ");
+        lst.SetAt("fourth ", 1);
+        lst.InsertBefore("zero ", 0);
+        StringList lst2;
+        lst2.AddHead("first. ");
+        lst2.AddHead("second ");
+        lst2.AddTail("third. ");
+        lst2.SetAt("fourth ", 1);
+        lst2.InsertBefore("zero ", 0);
+
+        cout << (lst == lst2);
+
+        checkUnique();
+        checkSplice();
+        lst2.AppendExclusively(lst);
+        lst2.InsertAfter("Last. ", lst2.GetSize() - 1);
+        cout << endl << endl;
+        for (const ListNode* p = lst2.GetHead(); p != nullptr; p = p->GetNext()) {
+            p->PrintNode();
+        }
+        cout << endl << endl;
+        lst2.RemoveTail();
+        cout << endl;
+        lst2.Find("first. ")->PrintNode();
+        cout << endl;
+        for (ListNode* p = lst2.GetHead(); p != nullptr; p = p->next) {
+            p->PrintNode();
+        }
+        
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
 }

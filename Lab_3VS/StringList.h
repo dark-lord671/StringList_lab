@@ -58,7 +58,6 @@ public:
     }
 
     ~String() {
-        std::cout << "\nString Destructor";
         delete[] data;
     }
 
